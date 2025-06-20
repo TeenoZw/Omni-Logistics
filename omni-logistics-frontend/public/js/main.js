@@ -673,35 +673,104 @@ function initializeContactForm() {
     }
   });
 
-  // Form submission
-  contactForm.addEventListener("submit", function (e) {
+  // Form submission with Netlify function
+  contactForm.addEventListener("submit", async function (e) {
     e.preventDefault();
 
     const submitBtn = this.querySelector(".submit-btn");
     const originalText = submitBtn.querySelector("span").textContent;
+    const formData = new FormData(this);
 
-    // Simulate form submission
+    // Collect form data
+    const data = {
+      fullName: formData.get("fullName"),
+      email: formData.get("email"),
+      phone: formData.get("phone"),
+      company: formData.get("company"),
+      planType: formData.get("planType"),
+      fleetSize: formData.get("fleetSize"),
+      message: formData.get("message"),
+    };
+
+    // Update button state
     submitBtn.disabled = true;
     submitBtn.querySelector("span").textContent = "Sending...";
     submitBtn.classList.add("loading");
 
-    setTimeout(() => {
-      submitBtn.querySelector("span").textContent = "Message Sent!";
-      submitBtn.classList.remove("loading");
-      submitBtn.classList.add("success");
+    try {
+      // Call Netlify function
+      const response = await fetch("/.netlify/functions/contact-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
+      const result = await response.json();
+
+      if (result.success) {
+        // Success state
+        submitBtn.querySelector("span").textContent = "Message Sent!";
+        submitBtn.classList.remove("loading");
+        submitBtn.classList.add("success");
+
+        // Show success message
+        showNotification(
+          "Thank you! We will get back to you within 24 hours.",
+          "success"
+        );
+
+        // Reset form after delay
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.querySelector("span").textContent = originalText;
+          submitBtn.classList.remove("success");
+          contactForm.reset();
+
+          // Reset field states
+          formFields.forEach((field) => {
+            field.classList.remove("focused", "has-value");
+          });
+        }, 3000);
+
+        // Call lead scoring function (optional)
+        try {
+          await fetch("/.netlify/functions/lead-scoring", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          });
+        } catch (scoringError) {
+          console.log("Lead scoring failed:", scoringError);
+          // Don't show error to user as this is internal
+        }
+      } else {
+        throw new Error(result.message || "Failed to send message");
+      }
+    } catch (error) {
+      console.error("Contact form error:", error);
+
+      // Error state
+      submitBtn.querySelector("span").textContent = "Failed to Send";
+      submitBtn.classList.remove("loading");
+      submitBtn.classList.add("error");
+
+      // Show error message
+      showNotification(
+        "Sorry, there was an error sending your message. Please try again.",
+        "error"
+      );
+
+      // Reset button after delay
       setTimeout(() => {
         submitBtn.disabled = false;
         submitBtn.querySelector("span").textContent = originalText;
-        submitBtn.classList.remove("success");
-        contactForm.reset();
-
-        // Reset field states
-        formFields.forEach((field) => {
-          field.classList.remove("focused", "has-value");
-        });
-      }, 2000);
-    }, 2000);
+        submitBtn.classList.remove("error");
+      }, 3000);
+    }
   });
 }
 
@@ -730,4 +799,130 @@ function initializeNewsletterForm() {
   });
 }
 
-// ...existing code...
+// ===========================
+// Notification System
+// ===========================
+
+function showNotification(message, type = "info") {
+  // Remove existing notifications
+  const existingNotifications = document.querySelectorAll(
+    ".notification-toast"
+  );
+  existingNotifications.forEach((notification) => notification.remove());
+
+  // Create notification element
+  const notification = document.createElement("div");
+  notification.className = `notification-toast notification-${type}`;
+  notification.innerHTML = `
+    <div class="notification-content">
+      <i class="fas ${
+        type === "success"
+          ? "fa-check-circle"
+          : type === "error"
+          ? "fa-exclamation-circle"
+          : "fa-info-circle"
+      }"></i>
+      <span>${message}</span>
+    </div>
+    <button class="notification-close">
+      <i class="fas fa-times"></i>
+    </button>
+  `;
+
+  // Add styles if not already present
+  if (!document.querySelector("#notification-styles")) {
+    const styles = document.createElement("style");
+    styles.id = "notification-styles";
+    styles.textContent = `
+      .notification-toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        padding: 16px 20px;
+        z-index: 10000;
+        max-width: 400px;
+        transform: translateX(100%);
+        transition: all 0.3s ease;
+        border-left: 4px solid #007bff;
+      }
+      
+      .notification-toast.notification-success {
+        border-left-color: #28a745;
+      }
+      
+      .notification-toast.notification-error {
+        border-left-color: #dc3545;
+      }
+      
+      .notification-toast.show {
+        transform: translateX(0);
+      }
+      
+      .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      
+      .notification-content i {
+        font-size: 16px;
+      }
+      
+      .notification-success .notification-content i {
+        color: #28a745;
+      }
+      
+      .notification-error .notification-content i {
+        color: #dc3545;
+      }
+      
+      .notification-close {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        opacity: 0.5;
+        transition: opacity 0.2s ease;
+      }
+      
+      .notification-close:hover {
+        opacity: 1;
+      }
+    `;
+    document.head.appendChild(styles);
+  }
+
+  // Add to DOM
+  document.body.appendChild(notification);
+
+  // Show notification
+  setTimeout(() => {
+    notification.classList.add("show");
+  }, 100);
+
+  // Auto hide after 5 seconds
+  const autoHideTimeout = setTimeout(() => {
+    hideNotification(notification);
+  }, 5000);
+
+  // Close button functionality
+  const closeBtn = notification.querySelector(".notification-close");
+  closeBtn.addEventListener("click", () => {
+    clearTimeout(autoHideTimeout);
+    hideNotification(notification);
+  });
+}
+
+function hideNotification(notification) {
+  notification.classList.remove("show");
+  setTimeout(() => {
+    if (notification.parentNode) {
+      notification.remove();
+    }
+  }, 300);
+}

@@ -6,8 +6,10 @@
   "scripts": {
     "start": "npx http-server public -p 8080",
     "dev": "npx live-server public --port=8080",
+    "dev:functions": "netlify dev",
     "build": "echo 'Static site - no build needed'",
-    "deploy": "netlify deploy --prod --dir=public"
+    "deploy": "netlify deploy --prod --dir=public",
+    "deploy:functions": "netlify deploy --prod"
   },
   "keywords": [
     "fleet-management",
@@ -26,9 +28,13 @@
     "url": "https://github.com/yourusername/omni-logistics-frontend/issues"
   },
   "homepage": "https://omni-logistics.netlify.app",
+  "dependencies": {
+    "nodemailer": "^6.9.0"
+  },
   "devDependencies": {
     "http-server": "^14.1.1",
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "netlify-cli": "^17.0.0"
   },
   "browserslist": [
     "defaults",

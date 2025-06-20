@@ -20,8 +20,10 @@ package-lock.json
 
 # Netlify
 .netlify/
-netlify/functions/
+netlify/functions/node_modules/
 dist/
+.env
+.env.local
 
 # IDE files
 .vscode/
