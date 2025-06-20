@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://your-domain.netlify.app/sitemap.xml
+
+# Disallow certain paths (if any)
+Disallow: /admin/
+Disallow: /_redirects
+Disallow: /netlify.toml
+
+# Allow crawling of main content
+Allow: /
+Allow: /assets/
+Allow: /css/
+Allow: /js/

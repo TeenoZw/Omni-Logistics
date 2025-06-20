@@ -1,0 +1,41 @@
+{
+  "name": "omni-logistics-frontend",
+  "version": "1.0.0",
+  "description": "Modern fleet management and vehicle tracking platform frontend",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "npx http-server public -p 8080",
+    "dev": "npx live-server public --port=8080",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "netlify deploy --prod --dir=public"
+  },
+  "keywords": [
+    "fleet-management",
+    "vehicle-tracking",
+    "logistics",
+    "gps-tracking",
+    "omni-logistics"
+  ],
+  "author": "Omni Logistics",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yourusername/omni-logistics-frontend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/omni-logistics-frontend/issues"
+  },
+  "homepage": "https://omni-logistics.netlify.app",
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2"
+  },
+  "browserslist": [
+    "defaults",
+    "not IE 11",
+    "not IE_Mob 11"
+  ],
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

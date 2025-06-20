@@ -3,14 +3,40 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO Meta Tags -->
     <meta
       name="description"
-      content="Omni Logistics - Next-generation Fleet Intelligence & Real-time Vehicle Tracking"
+      content="Omni Logistics - Next-generation Fleet Intelligence & Real-time Vehicle Tracking. Transform your fleet management with AI-powered insights and IoT technology."
     />
     <meta
       name="keywords"
-      content="vehicle tracking, fleet management, GPS tracking, Zimbabwe, logistics, AI, IoT"
+      content="vehicle tracking, fleet management, GPS tracking, Zimbabwe, logistics, AI, IoT, real-time monitoring, fleet optimization"
     />
+    <meta name="author" content="Omni Logistics">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://omni-logistics.netlify.app/">
+    <meta property="og:title" content="Omni Logistics - Future of Fleet Intelligence">
+    <meta property="og:description" content="Transform your fleet management with AI-powered insights and real-time vehicle tracking. Next-generation logistics solutions for modern businesses.">
+    <meta property="og:image" content="https://omni-logistics.netlify.app/assets/logo.PNG">
+    <meta property="og:site_name" content="Omni Logistics">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://omni-logistics.netlify.app/">
+    <meta property="twitter:title" content="Omni Logistics - Future of Fleet Intelligence">
+    <meta property="twitter:description" content="Transform your fleet management with AI-powered insights and real-time vehicle tracking.">
+    <meta property="twitter:image" content="https://omni-logistics.netlify.app/assets/logo.PNG">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./assets/logo.PNG">
+    <link rel="apple-touch-icon" href="./assets/logo.PNG">
+    
     <title>Omni Logistics - Future of Fleet Intelligence</title>
     
     <!-- Google Fonts -->
@@ -881,8 +907,13 @@
               <p>Tell us about your requirements and we'll get back to you within 24 hours</p>
             </div>
             
-            <form class="modern-contact-form">
+            <form class="modern-contact-form" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+              <!-- Hidden field for bot detection -->
+              <input type="hidden" name="form-name" value="contact" />
               <div class="form-grid">
+                <div class="form-field" style="display: none;">
+                  <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                </div>
                 <div class="form-field">
                   <label for="fullName">Full Name *</label>
                   <input type="text" id="fullName" name="fullName" required>
