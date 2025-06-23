@@ -2,8 +2,6 @@
 // Futuristic Landing Page JavaScript
 // ===========================
 
-console.log("🚀 Omni Logistics - Futuristic Interface Loaded!");
-
 // ===========================
 // DOM Content Loaded Handler
 // ===========================
@@ -21,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
   initializeGlassEffects();
   initializePulseDots();
   initializePricingToggle();
-  console.log("✨ All futuristic components initialized");
 });
 
 // ===========================
@@ -464,12 +461,7 @@ function initializePricingToggle() {
   const typeButtons = document.querySelectorAll(".type-btn");
   const plansSections = document.querySelectorAll(".plans-section");
 
-  console.log("🎯 Initializing modern pricing toggle...");
-  console.log("Type buttons found:", typeButtons.length);
-  console.log("Plans sections found:", plansSections.length);
-
   if (!typeButtons.length || !plansSections.length) {
-    console.warn("❌ Missing type buttons or plans sections");
     return;
   }
 
@@ -477,7 +469,6 @@ function initializePricingToggle() {
   const personalPlans = document.querySelector(".personal-plans");
   if (personalPlans) {
     personalPlans.classList.add("active");
-    console.log("✅ Personal plans made visible by default");
   }
 
   // Hide all other plans initially
@@ -491,7 +482,6 @@ function initializePricingToggle() {
   typeButtons.forEach((button) => {
     button.addEventListener("click", function () {
       const planType = this.getAttribute("data-type");
-      console.log(`🔄 Switching to ${planType} plans`);
 
       // Remove active class from all type buttons
       typeButtons.forEach((btn) => btn.classList.remove("active"));
@@ -514,10 +504,6 @@ function initializePricingToggle() {
         setTimeout(() => {
           targetSection.classList.add("active");
         }, 150); // Slight delay for smooth transition
-
-        console.log(`✅ Switched to ${planType} plans`);
-      } else {
-        console.error(`❌ Could not find section for ${planType} plans`);
       }
     });
   });
@@ -606,7 +592,7 @@ document.head.appendChild(style);
 window.addEventListener(
   "resize",
   debounce(function () {
-    console.log("🔄 Window resized - reinitializing responsive elements");
+    // Reinitialize responsive elements on resize
   }, 250)
 );
 
@@ -678,6 +664,7 @@ function initializeContactForm() {
     e.preventDefault();
 
     const submitBtn = this.querySelector(".submit-btn");
+    if (!submitBtn) return;
     const originalText = submitBtn.querySelector("span").textContent;
     const formData = new FormData(this);
 
@@ -685,12 +672,28 @@ function initializeContactForm() {
     const data = {
       fullName: formData.get("fullName"),
       email: formData.get("email"),
-      phone: formData.get("phone"),
-      company: formData.get("company"),
-      planType: formData.get("planType"),
-      fleetSize: formData.get("fleetSize"),
+      phone: formData.get("phone") || "",
+      company: formData.get("company") || "",
+      planType: formData.get("planType") || "",
+      fleetSize: formData.get("fleetSize") || "",
       message: formData.get("message"),
     };
+
+    // Basic validation
+    if (!data.fullName || !data.email || !data.message) {
+      showNotification(
+        "Please fill in all required fields (Name, Email, Message)",
+        "error"
+      );
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+      showNotification("Please enter a valid email address", "error");
+      return;
+    }
 
     // Update button state
     submitBtn.disabled = true;
@@ -698,8 +701,16 @@ function initializeContactForm() {
     submitBtn.classList.add("loading");
 
     try {
+      // Determine the correct endpoint URL
+      const isLocalDev =
+        window.location.hostname === "localhost" &&
+        window.location.port === "3000";
+      const endpoint = isLocalDev
+        ? "http://localhost:3000/.netlify/functions/contact-form"
+        : "/.netlify/functions/contact-form";
+
       // Call Netlify function
-      const response = await fetch("/.netlify/functions/contact-form", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -707,7 +718,23 @@ function initializeContactForm() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      // Check if response is OK first
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Try to parse as JSON, but handle cases where it's not JSON
+      let result;
+      const contentType = response.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        result = await response.json();
+      } else {
+        // If not JSON, get the text and try to understand the error
+        const text = await response.text();
+        console.error("Non-JSON response received:", text);
+        throw new Error("Server returned invalid response format");
+      }
 
       if (result.success) {
         // Success state
@@ -744,6 +771,7 @@ function initializeContactForm() {
             body: JSON.stringify(data),
           });
         } catch (scoringError) {
+          // Silently handle lead scoring errors
           console.log("Lead scoring failed:", scoringError);
           // Don't show error to user as this is internal
         }
@@ -758,11 +786,22 @@ function initializeContactForm() {
       submitBtn.classList.remove("loading");
       submitBtn.classList.add("error");
 
+      // Show more specific error messages
+      let errorMessage =
+        "Sorry, there was an error sending your message. Please try again.";
+
+      if (error.message.includes("HTTP error")) {
+        errorMessage =
+          "Server error occurred. Please try again in a few minutes.";
+      } else if (error.message.includes("Failed to fetch")) {
+        errorMessage =
+          "Network error. Please check your connection and try again.";
+      } else if (error.message.includes("invalid response format")) {
+        errorMessage = "Server configuration error. Please contact support.";
+      }
+
       // Show error message
-      showNotification(
-        "Sorry, there was an error sending your message. Please try again.",
-        "error"
-      );
+      showNotification(errorMessage, "error");
 
       // Reset button after delay
       setTimeout(() => {
@@ -772,6 +811,18 @@ function initializeContactForm() {
       }, 3000);
     }
   });
+
+  // Also add a direct click listener to the submit button as fallback
+  const submitBtn = contactForm.querySelector(".submit-btn");
+  if (submitBtn) {
+    submitBtn.addEventListener("click", function (e) {
+      // Check if this is preventing form submission
+      if (contactForm.checkValidity && !contactForm.checkValidity()) {
+        return;
+      }
+      contactForm.dispatchEvent(new Event("submit", { cancelable: true }));
+    });
+  }
 }
 
 function initializeNewsletterForm() {

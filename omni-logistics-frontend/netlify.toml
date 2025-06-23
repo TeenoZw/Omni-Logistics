@@ -12,12 +12,17 @@
   # Node version (if needed for any build processes)
   NODE_VERSION = "18"
 
+[dev]
+  # Local development configuration
+  publish = "public"
+  functions = "netlify/functions"
+  port = 8888
+
 # Redirect rules for SPA behavior (if needed)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  conditions = {Role = ["admin"], Country = ["US"]}
   force = false
 
 # Headers for security and performance

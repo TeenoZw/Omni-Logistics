@@ -44,116 +44,15 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome Preload -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    
-    <!-- Font Awesome Icons with Fallback -->
+    <!-- Font Awesome Icons -->
     <link
       rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
-      onerror="this.onerror=null;this.href='https://use.fontawesome.com/releases/v6.5.1/css/all.css';"
     />
-    
-    <!-- Alternative Font Awesome CDN as backup -->
-    <noscript>
-      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.5.1/css/all.css">
-    </noscript>
-    
-    <!-- Font Awesome Fallback for Critical Icons -->
-    <style>
-      /* Fallback styles if Font Awesome fails to load */
-      .fa-fallback {
-        display: inline-block;
-        width: 1em;
-        height: 1em;
-        fill: currentColor;
-        vertical-align: -0.125em;
-      }
-      
-      /* Hide fallback when Font Awesome loads */
-      .fa:not(.fa-fallback) + .fa-fallback,
-      .fas:not(.fa-fallback) + .fa-fallback,
-      .far:not(.fa-fallback) + .fa-fallback {
-        display: none;
-      }
-    </style>
-    
-    <!-- SVG Icon Definitions for Fallback -->
-    <svg style="display: none;">
-      <defs>
-        <symbol id="icon-menu" viewBox="0 0 24 24">
-          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
-        </symbol>
-        <symbol id="icon-close" viewBox="0 0 24 24">
-          <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-        </symbol>
-        <symbol id="icon-check" viewBox="0 0 24 24">
-          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-        </symbol>
-        <symbol id="icon-arrow-up" viewBox="0 0 24 24">
-          <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
-        </symbol>
-        <symbol id="icon-rocket" viewBox="0 0 24 24">
-          <path d="M2.81 14.07l1.414-1.414L12 20.43l7.778-7.778 1.414 1.414L12 23.258l-9.19-9.188zM15.95 10.93l.707-.707a1 1 0 0 0 0-1.414l-2.828-2.828a1 1 0 0 0-1.414 0l-.707.707a1 1 0 0 0 0 1.414l2.828 2.828a1 1 0 0 0 1.414 0z"/>
-        </symbol>
-      </defs>
-    </svg>
-    
     <link rel="stylesheet" href="./css/style.css" />
-    
-    <!-- Font Awesome Load Detection Script -->
-    <script>
-      // Check if Font Awesome loaded properly
-      document.addEventListener('DOMContentLoaded', function() {
-        // Create a test element to check if Font Awesome CSS loaded
-        const testElement = document.createElement('i');
-        testElement.className = 'fas fa-home';
-        testElement.style.position = 'absolute';
-        testElement.style.left = '-9999px';
-        document.body.appendChild(testElement);
-        
-        // Check if the icon has the expected properties
-        setTimeout(function() {
-          const computed = window.getComputedStyle(testElement, ':before');
-          const content = computed.getPropertyValue('content');
-          
-          // If Font Awesome didn't load, add fallback class
-          if (!content || content === 'none' || content === '""') {
-            document.body.classList.add('fa-fallback-mode');
-            console.warn('Font Awesome failed to load, using fallback icons');
-            
-            // Replace common Font Awesome icons with SVG fallbacks
-            const iconMap = {
-              'fa-bars': 'icon-menu',
-              'fa-times': 'icon-close', 
-              'fa-check': 'icon-check',
-              'fa-arrow-up': 'icon-arrow-up',
-              'fa-rocket': 'icon-rocket'
-            };
-            
-            Object.keys(iconMap).forEach(faClass => {
-              const elements = document.querySelectorAll('.' + faClass);
-              elements.forEach(el => {
-                if (el.tagName.toLowerCase() === 'i') {
-                  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-                  const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-                  svg.classList.add('fa-fallback');
-                  use.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#' + iconMap[faClass]);
-                  svg.appendChild(use);
-                  el.parentNode.insertBefore(svg, el);
-                  el.style.display = 'none';
-                }
-              });
-            });
-          }
-          
-          document.body.removeChild(testElement);
-        }, 1000);
-      });
-    </script>
   </head>
   <body>
   <body>
@@ -1044,15 +943,15 @@
                 <label for="planType">Interested Plan</label>
                 <select id="planType" name="planType">
                   <option value="">Select a plan type</option>
-                  <optgroup label="Personal Plans">
-                    <option value="personal-essential">Essential - Basic tracking</option>
-                    <option value="personal-professional">Professional - Advanced features</option>
-                    <option value="personal-elite">Elite - Complete solution</option>
+                  <optgroup label="Individual Plans">
+                    <option value="individual-Basic">Basic - Entry level tracking</option>
+                    <option value="individual-Standard">Standard - Advanced features</option>
+                    <option value="individual-Premium">Premium - Complete solution</option>
                   </optgroup>
-                  <optgroup label="Business Plans">
-                    <option value="business-starter">Starter - Essential fleet management</option>
-                    <option value="business-growth">Growth - Advanced optimization</option>
-                    <option value="business-enterprise">Enterprise - Complete command center</option>
+                  <optgroup label="Enterprise Plans">
+                    <option value="Enterprise-Gold">Gold - Essential fleet management</option>
+                    <option value="Enterprise-Diamond">Diamond - Advanced optimization</option>
+                    <option value="Enterprise-Platinum">Platinum - Complete command center</option>
                   </optgroup>
                   <option value="custom">Custom Solution</option>
                 </select>
@@ -1289,7 +1188,7 @@
         <div class="footer-bottom">
           <div class="footer-bottom-content">
             <div class="copyright">
-              <p>&copy; 2025 Omni Logistics. All rights reserved.</p>
+              <p>&copy; 2025 Code by H2O. All rights reserved.</p>
               <p>Professional Vehicle Tracking Solutions in Zimbabwe</p>
             </div>
             

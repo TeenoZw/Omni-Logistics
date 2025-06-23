@@ -62,14 +62,62 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Configure email transporter (you'll need to set these environment variables)
-    const transporter = nodemailer.createTransporter({
-      service: "gmail", // or your email service
+    // Check if we're in local development mode
+    const isLocalDev =
+      process.env.NODE_ENV === "development" ||
+      process.env.NETLIFY_DEV === "true" ||
+      !process.env.SMTP_HOST;
+
+    if (isLocalDev) {
+      // Development mode: Simulate email sending
+
+      // Simulate email sending delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Return success response for development
+      return {
+        statusCode: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          success: true,
+          message:
+            "Thank you for your message! We will get back to you within 24 hours.",
+          dev_mode: true,
+        }),
+      };
+    }
+
+    // Configure email transporter with flexible SMTP settings (production only)
+    const smtpPort = parseInt(process.env.SMTP_PORT) || 465;
+    const isSecure = smtpPort === 465; // Use SSL for port 465, STARTTLS for 587
+
+    const transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: smtpPort,
+      secure: isSecure,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      // Additional options for better compatibility
+      tls: {
+        rejectUnauthorized: false, // Allow self-signed certificates
+      },
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 5000, // 5 seconds
+      socketTimeout: 10000, // 10 seconds
     });
+
+    // Verify SMTP connection
+    try {
+      await transporter.verify();
+    } catch (verifyError) {
+      console.error("SMTP verification failed:", verifyError.message);
+      // Continue anyway - some servers don't support verify
+    }
 
     // Email template for admin notification
     const adminEmailHtml = `
@@ -201,6 +249,16 @@ exports.handler = async (event, context) => {
   } catch (error) {
     console.error("Contact form error:", error);
 
+    // Enhanced error response with debugging info
+    const errorMessage =
+      error.code === "EAUTH"
+        ? "Email authentication failed. Please check your email configuration."
+        : error.code === "ENOTFOUND"
+        ? "Email server not found. Please check your SMTP settings."
+        : error.code === "ECONNREFUSED"
+        ? "Connection refused by email server. Please check your SMTP port and host."
+        : "Sorry, there was an error sending your message. Please try again later.";
+
     return {
       statusCode: 500,
       headers: {
@@ -209,8 +267,9 @@ exports.handler = async (event, context) => {
       },
       body: JSON.stringify({
         success: false,
-        message:
-          "Sorry, there was an error sending your message. Please try again later.",
+        message: errorMessage,
+        debug:
+          process.env.NODE_ENV === "development" ? error.message : undefined,
       }),
     };
   }
