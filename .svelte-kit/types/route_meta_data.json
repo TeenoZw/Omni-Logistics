@@ -1,0 +1,6 @@
+{
+	"/": [],
+	"/api/contact": [
+		"src/routes/api/contact/+server.js"
+	]
+}
