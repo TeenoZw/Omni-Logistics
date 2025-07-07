@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Omni Logistics - Email Template Preview</title>
+    <style>
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: #f0f2f5;
+        margin: 0;
+        padding: 40px 20px;
+      }
+      .preview-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .preview-section {
+        margin-bottom: 60px;
+      }
+      .preview-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .email-preview {
+        max-width: 600px;
+        margin: 0 auto;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      /* Client Email Styles */
+      .client-email {
+        background: white;
+      }
+      .client-email .header {
+        background: linear-gradient(135deg, #0d1126 0%, #1a223d 100%);
+        padding: 40px 30px;
+        text-align: center;
+      }
+      .client-email .header h1 {
+        color: white;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .client-email .header .subtitle {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .client-email .welcome {
+        background: #00a2ff;
+        color: white;
+        padding: 25px 30px;
+        text-align: center;
+      }
+      .client-email .welcome h2 {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+      .client-email .welcome p {
+        font-size: 16px;
+        opacity: 0.9;
+      }
+      .client-email .content {
+        padding: 40px 30px;
+      }
+      .client-email .section {
+        margin-bottom: 35px;
+      }
+      .client-email .section h3 {
+        color: #1f2937;
+        font-size: 20px;
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+      }
+      .client-email .section h3::before {
+        content: "";
+        width: 4px;
+        height: 20px;
+        background: #00a2ff;
+        margin-right: 12px;
+        border-radius: 2px;
+      }
+      .client-email .details-grid {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 25px;
+      }
+      .client-email .detail-item {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .client-email .detail-item:last-child {
+        border-bottom: none;
+      }
+      .client-email .detail-label {
+        font-weight: 600;
+        color: #374151;
+        min-width: 110px;
+      }
+      .client-email .detail-value {
+        color: #6b7280;
+        flex: 1;
+      }
+      .client-email .message-box {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        border: 1px solid #0ea5e9;
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 20px;
+      }
+      .client-email .message-box p {
+        color: #0c4a6e;
+        font-style: italic;
+        line-height: 1.6;
+      }
+      .client-email .next-steps {
+        background: #f0fdf4;
+        border: 1px solid #22c55e;
+        border-radius: 12px;
+        padding: 25px;
+      }
+      .client-email .next-steps ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      .client-email .next-steps li {
+        color: #166534;
+        margin-bottom: 12px;
+        padding-left: 25px;
+        position: relative;
+      }
+      .client-email .next-steps li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #22c55e;
+        font-weight: bold;
+      }
+      .client-email .about-section {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        color: white;
+        padding: 30px;
+        border-radius: 12px;
+        text-align: center;
+      }
+      .client-email .about-section h3 {
+        color: white;
+        margin-bottom: 15px;
+      }
+      .client-email .about-section h3::before {
+        background: #00a2ff;
+      }
+      .client-email .about-section p {
+        color: rgba(255, 255, 255, 0.9);
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .client-email .cta-button {
+        display: inline-block;
+        background: #00a2ff;
+        color: white;
+        padding: 12px 24px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background 0.3s;
+      }
+      .client-email .cta-button:hover {
+        background: #0066cc;
+      }
+      .client-email .footer {
+        background: #f8fafc;
+        padding: 30px;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+      }
+      .client-email .footer .signature {
+        color: #1f2937;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 15px;
+      }
+      .client-email .footer .team {
+        color: #6b7280;
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
+      .client-email .footer .disclaimer {
+        color: #9ca3af;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .client-email .footer .support {
+        color: #00a2ff;
+        font-weight: 500;
+      }
+
+      /* Admin Email Styles */
+      .admin-email {
+        background: white;
+      }
+      .admin-email .header {
+        background: linear-gradient(135deg, #0d1126 0%, #1a223d 100%);
+        padding: 30px;
+        text-align: center;
+      }
+      .admin-email .header h1 {
+        color: white;
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .admin-email .header p {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 14px;
+      }
+      .admin-email .content {
+        padding: 40px 30px;
+      }
+      .admin-email .alert {
+        background: #00a2ff;
+        color: white;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        font-weight: 500;
+      }
+      .admin-email .details {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 30px;
+      }
+      .admin-email .detail-row {
+        display: flex;
+        padding: 8px 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .admin-email .detail-row:last-child {
+        border-bottom: none;
+      }
+      .admin-email .detail-label {
+        font-weight: 600;
+        color: #374151;
+        min-width: 100px;
+      }
+      .admin-email .detail-value {
+        color: #6b7280;
+        flex: 1;
+      }
+      .admin-email .message-section {
+        margin-top: 30px;
+      }
+      .admin-email .message-section h3 {
+        color: #374151;
+        margin-bottom: 15px;
+        font-size: 18px;
+      }
+      .admin-email .message-content {
+        background: #f8fafc;
+        border-left: 4px solid #00a2ff;
+        padding: 20px;
+        border-radius: 4px;
+        font-style: italic;
+        color: #4b5563;
+      }
+      .admin-email .footer {
+        background: #f8fafc;
+        padding: 20px 30px;
+        text-align: center;
+        border-top: 1px solid #e2e8f0;
+      }
+      .admin-email .footer p {
+        color: #6b7280;
+        font-size: 12px;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-container">
+      <!-- Client Email Preview -->
+      <div class="preview-section">
+        <h2 class="preview-title">Client Confirmation Email</h2>
+        <div class="email-preview client-email">
+          <div class="header">
+            <h1>🚛 Omni Logistics</h1>
+            <p class="subtitle">Empowering your fleet, Driving your success</p>
+          </div>
+
+          <div class="welcome">
+            <h2>Thank you for your inquiry, John Smith!</h2>
+            <p>
+              We've received your message and our team will review it shortly.
+            </p>
+          </div>
+
+          <div class="content">
+            <div class="section">
+              <h3>Your Inquiry Details</h3>
+              <div class="details-grid">
+                <div class="detail-item">
+                  <div class="detail-label">Name:</div>
+                  <div class="detail-value">John Smith</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Email:</div>
+                  <div class="detail-value">john.smith@example.com</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Phone:</div>
+                  <div class="detail-value">+263 71 234 5678</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Company:</div>
+                  <div class="detail-value">ABC Transport Ltd</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Plan Type:</div>
+                  <div class="detail-value">Premium Fleet Management</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Fleet Size:</div>
+                  <div class="detail-value">50-100 vehicles</div>
+                </div>
+              </div>
+              <div class="message-box">
+                <p>
+                  <strong>Your Message:</strong><br />I'm interested in your
+                  fleet tracking solutions for my logistics company. Please
+                  provide more information about your Premium plan and pricing.
+                </p>
+              </div>
+            </div>
+
+            <div class="section">
+              <h3>What Happens Next</h3>
+              <div class="next-steps">
+                <ul>
+                  <li>Our team will review your inquiry within 24 hours</li>
+                  <li>
+                    We will respond with tailored solutions for your logistics
+                    needs
+                  </li>
+                  <li>
+                    A dedicated account manager will be assigned to your case
+                  </li>
+                  <li>We'll schedule a consultation call if needed</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="section">
+              <div class="about-section">
+                <h3>About Omni Logistics</h3>
+                <p>
+                  Leading provider of professional vehicle tracking and fleet
+                  management solutions across Zimbabwe. Empowering businesses
+                  and individuals with real-time insights and control over their
+                  assets.
+                </p>
+                <a href="#" class="cta-button">Visit Our Website</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <div class="signature">Best regards,</div>
+            <div class="team">The Omni Logistics Team</div>
+            <div class="disclaimer">
+              <em
+                >This is an automated message. Please do not reply to this
+                email.</em
+              ><br />
+              If you need immediate assistance, please contact us at
+              <span class="support">admin@omnilogistics.co.zw</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Email Preview -->
+      <div class="preview-section">
+        <h2 class="preview-title">Admin Notification Email</h2>
+        <div class="email-preview admin-email">
+          <div class="header">
+            <h1>🚛 Omni Logistics</h1>
+            <p>New Contact Form Submission</p>
+          </div>
+          <div class="content">
+            <div class="alert">📧 New inquiry received from John Smith</div>
+            <div class="details">
+              <div class="detail-row">
+                <div class="detail-label">Name:</div>
+                <div class="detail-value">John Smith</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Email:</div>
+                <div class="detail-value">john.smith@example.com</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Phone:</div>
+                <div class="detail-value">+263 71 234 5678</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Company:</div>
+                <div class="detail-value">ABC Transport Ltd</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Plan Type:</div>
+                <div class="detail-value">Premium Fleet Management</div>
+              </div>
+              <div class="detail-row">
+                <div class="detail-label">Fleet Size:</div>
+                <div class="detail-value">50-100 vehicles</div>
+              </div>
+            </div>
+            <div class="message-section">
+              <h3>Message:</h3>
+              <div class="message-content">
+                I'm interested in your fleet tracking solutions for my logistics
+                company. Please provide more information about your Premium plan
+                and pricing.
+              </div>
+            </div>
+          </div>
+          <div class="footer">
+            <p>Submitted at: January 7, 2025, 10:30 AM</p>
+            <p>Website: https://omnilogistics.co.zw</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
