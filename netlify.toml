@@ -12,6 +12,10 @@
   # Node version for Next.js
   NODE_VERSION = "18"
 
+# For Next.js with API routes
+[functions]
+  node_bundler = "esbuild"
+
 # Next.js handles routing internally, no redirects needed
 
 # Headers for security and performance
