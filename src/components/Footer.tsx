@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 export default function Footer() {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -17,10 +19,12 @@ export default function Footer() {
           <div className="footer-section company-section">
             <div className="footer-brand">
               <div className="brand-logo-container">
-                <img
+                <Image
                   src="/assets/logo.PNG"
                   alt="Omni Logistics Logo"
                   className="footer-logo"
+                  width={50}
+                  height={50}
                 />
                 <div className="brand-text">
                   <h3>Omni Logistics</h3>

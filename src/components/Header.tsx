@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface NavLink {
   href: string;
@@ -99,10 +100,12 @@ export default function Header() {
         <div className="nav-container">
           <div className="nav-brand">
             <div className="brand-icon">
-              <img
+              <Image
                 src="/assets/logo.PNG"
                 alt="Omni Logistics Logo"
                 className="brand-logo"
+                width={40}
+                height={40}
               />
             </div>
             <span className="brand-text">Omni Logistics</span>
@@ -152,10 +155,12 @@ export default function Header() {
               &times;
             </button>
             <div className="login-logo">
-              <img
+              <Image
                 src="/assets/omni eye portal logo.PNG"
                 alt="Omni Eye Portal Logo"
                 className="portal-logo-modal"
+                width={80}
+                height={80}
               />
             </div>
             <h2>Login to Omni Eye Portal</h2>
