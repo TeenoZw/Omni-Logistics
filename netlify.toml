@@ -1,16 +1,18 @@
 [build]
-  # SvelteKit build command
+  # Next.js build command
   command = "npm run build"
   
-  # SvelteKit build output directory
-  publish = "build"
+  # Next.js build output directory for Netlify
+  publish = ".next"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
 
 [build.environment]
-  # Node version for SvelteKit
+  # Node version for Next.js
   NODE_VERSION = "18"
 
-# SvelteKit handles routing internally, no redirects needed
-# The adapter-netlify automatically configures this
+# Next.js handles routing internally, no redirects needed
 
 # Headers for security and performance
 [[headers]]
