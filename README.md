@@ -259,12 +259,47 @@ All components are modular and can be easily customized:
 
 ## 📧 Contact Form Integration
 
-The contact form integrates with Next.js API Routes for:
+The contact form includes advanced email functionality with:
 
-- Form validation
-- Email delivery via SMTP
-- Environment variable configuration
-- Professional email formatting
+### Features
+
+- **Form validation** with real-time feedback
+- **Dual email system**:
+  - Admin notification emails for new inquiries
+  - Professional confirmation emails sent to clients
+- **Environment variable configuration** for SMTP settings
+- **Error handling** with user-friendly messages
+- **Professional email templates** with company branding
+
+### Email Templates
+
+- **Admin Email**: Receives form submissions with full contact details
+- **Client Confirmation**: Professional welcome email with:
+  - Inquiry details summary
+  - Next steps information
+  - Company information
+  - Contact details for support
+
+### Setup
+
+1. Copy `.env.example` to `.env.local` (development) or `.env` (production)
+2. Configure your SMTP settings:
+   ```env
+   SMTP_HOST=smtp.gmail.com
+   SMTP_PORT=465
+   EMAIL_USER=your-email@gmail.com
+   EMAIL_PASS=your-app-password
+   ADMIN_EMAIL=admin@omnilogistics.co.zw
+   WEBSITE_URL=https://omnilogistics.co.zw
+   ```
+3. For Gmail, use an App Password instead of your regular password
+4. Test the form to ensure both emails are delivered properly
+
+### API Endpoint
+
+- **URL**: `/api/contact`
+- **Method**: POST
+- **Response**: JSON with success/error status and message
 
 ## 🔧 Configuration
 
